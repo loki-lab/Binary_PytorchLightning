@@ -22,16 +22,18 @@ class VGG16Lightning(LightningModule):
         output = self.forward(image)
         loss = nn.CrossEntropyLoss()(output, label)
         accuracy = self.accuracy(output, label)
-        self.log("train_loss_step", loss, on_step=True, on_epoch=True)
-        self.log("train_acc_step", accuracy, on_step=True, on_epoch=True)
+        self.log("train_loss_step", loss, on_step=False, on_epoch=True)
+        self.log("train_acc_step", accuracy, on_step=False, on_epoch=True)
+        return loss
 
     def validation_step(self, input, input_idx):
         image, label = input
         output = self.forward(image)
         loss = nn.CrossEntropyLoss()(output, label)
         accuracy = self.accuracy(output, label)
-        self.log("val_loss_step", loss, on_step=True, on_epoch=True)
-        self.log("val_acc_step", accuracy, on_step=True, on_epoch=True)
+        self.log("val_loss_step", loss, on_step=False, on_epoch=True)
+        self.log("val_acc_step", accuracy, on_step=False, on_epoch=True)
+        return loss
 
     def configure_optimizers(self):
         return Adam(self.model.parameters(), lr=0.0001)
